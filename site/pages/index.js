@@ -37,7 +37,7 @@ function Home() {
 
   const sendOrcamento = async e => {
     e.preventDefault();
-
+    setResponse({formSave : true});
    try{
      const res = await fetch('http://localhost:8080/orcamento', {
        method: 'POST',
@@ -50,17 +50,23 @@ function Home() {
      //console.log(responseEnv.error);
      if(responseEnv.error) {
        setResponse({
+         formSave: false,
          type: 'error',
          message: responseEnv.message
        });
      } else {
        setResponse({
+         formSave: false,
          type: 'success',
          message: responseEnv.message
        })
      }
    } catch(err) {
-
+    setResponse({
+      formSave: false,
+      type: 'error',
+      message: 'Erro Solicitação de orçamento não enviado com sucesso, tente mais tarde!'
+    });
    }
   }
 
@@ -90,8 +96,8 @@ function Home() {
                 background-color: #f5fbfa;
                 color: #17a2b8;
                 padding-top: 50px;
-                padding-bottom: 150px;
-                margin-bottom: 0rem ! import;
+                padding-bottom: 100px;
+                margin-bottom: 0rem !important;
             }`}
           </style>
           <Container className="pg-orcamento">
@@ -130,12 +136,27 @@ function Home() {
                 <Input type="textarea" name="msg" id="msg" placeholder="Fale um pouco do seu projeto" 
                 onChange= {onChangeInput}/>
               </FormGroup>
-
-              <Button type="submit" outline color="info">
-                Enviar
-              </Button>
+              { response.formSave ? <Button type="submit" 
+              outline color="info" disabled>Enviando...</Button> :
+              <Button type="submit" 
+              outline color="info">Enviar</Button>}
+              
             </Form>
           </Container>
+      </Jumbotron>
+
+      <Jumbotron fluid className="rodape bg-info">
+        <style>
+          {`.rodape {
+            color: #fff;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 0rem !important;
+          }`}
+        </style>
+        <Container>
+          <h1 className="lead text-center">Rodapé</h1>
+        </Container>
       </Jumbotron>
       </div>
       );
